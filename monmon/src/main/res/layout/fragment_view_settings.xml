@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Peaking Threshold"
+            android:text="峰焦阈值"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <com.google.android.material.slider.Slider
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Peaking Visibility"
+            android:text="峰焦显示"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <RadioGroup
@@ -55,19 +55,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Overlay" />
+                android:text="叠加显示" />
 
             <RadioButton
                 android:id="@+id/peak_vis_off"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Off" />
+                android:text="关闭" />
 
             <RadioButton
                 android:id="@+id/peak_vis_edges"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Edges Only" />
+                android:text="仅边缘" />
 
         </RadioGroup>
 
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Peaking Color"
+            android:text="峰焦颜色"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <RadioGroup
@@ -91,51 +91,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Red" />
+                android:text="红色" />
 
             <RadioButton
                 android:id="@+id/peak_color_green"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Green" />
+                android:text="绿色" />
 
             <RadioButton
                 android:id="@+id/peak_color_blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Blue" />
+                android:text="蓝色" />
 
             <RadioButton
                 android:id="@+id/peak_color_yellow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Yellow" />
+                android:text="黄色" />
 
             <RadioButton
                 android:id="@+id/peak_color_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="White" />
+                android:text="白色" />
 
         </RadioGroup>
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Reduce Resolution"
+            android:text="降低分辨率"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tries to force a lower device resolution, which may improve performance on older devices. Requires preview restart (press BACK and re-open USB device)." />
+            android:text="强制使用较低分辨率，可提升旧设备性能。需要退出预览后重新进入生效。" />
 
         <Switch
             android:id="@+id/reduceRes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Force 720p30" />
+            android:text="强制 720p30" />
     </LinearLayout>
 </ScrollView>
