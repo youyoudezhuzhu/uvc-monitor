@@ -92,7 +92,7 @@ class FullscreenActivity : AppCompatActivity() {
             data: ByteArray?,
             width: Int,
             height: Int,
-            format: DataFormat
+            format: IPreviewDataCallBack.DataFormat
         ) {
             if (!peakEnabled) return
             val nv21 = data ?: return
