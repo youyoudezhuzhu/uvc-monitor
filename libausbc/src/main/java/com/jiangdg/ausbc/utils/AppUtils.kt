@@ -58,7 +58,7 @@ object AppUtils {
         val packageManager: PackageManager = ctx.packageManager
         try {
             val packageInfo: PackageInfo = packageManager.getPackageInfo(ctx.packageName, 0)
-            val labelRes: Int = packageInfo.applicationInfo.labelRes
+            val labelRes: Int = packageInfo.applicationInfo?.labelRes ?: 0
             return ctx.getString(labelRes)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
