@@ -109,9 +109,9 @@ class FullscreenActivity : AppCompatActivity() {
 
         scaleGestureDetector = ScaleGestureDetector(
             this,
-            ScaleListener(listOf(cameraViewMain, cameraOverlay))
+            ScaleListener(listOfNotNull(cameraViewMain, cameraOverlay))
         )
-        panGestureDetector = GestureDetector(this, PanListener(listOf(cameraViewMain, cameraOverlay)))
+        panGestureDetector = GestureDetector(this, PanListener(listOfNotNull(cameraViewMain, cameraOverlay)))
 
         // 手势：单点点击切换控制条，双指捏合缩放/拖动
         binding.root.setOnTouchListener { _, event ->
