@@ -21,6 +21,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Verify resources (static check)
+        run: python3 scripts/verify_resources.py
+
       - name: Build debug APK
         run: |
           chmod +x gradlew
