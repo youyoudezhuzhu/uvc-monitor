@@ -62,7 +62,7 @@ class FullscreenActivity : AppCompatActivity() {
     private var currentSize: Size? = null
 
     @Volatile
-    private var peakEnabled = true
+    private var peakEnabled = false
     @Volatile
     private var dontEdge = false
     @Volatile
