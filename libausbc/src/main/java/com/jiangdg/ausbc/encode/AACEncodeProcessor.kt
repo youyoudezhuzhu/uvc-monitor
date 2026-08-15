@@ -328,7 +328,14 @@ class AACEncodeProcessor(strategy: IAudioStrategy? = null) : AbstractProcessor(f
         val sampleRate = mAudioRecord.getSampleRate()
         val audioFormat = mAudioRecord.getAudioFormat()
         val channelCount = mAudioRecord.getChannelCount()
-        val channelConfig = mAudioRecord.getChannelConfig()
+        // 注意：AudioTrack 需要 CHANNEL_OUT_* 掩码，getChannelConfig() 返回的是
+        // AudioRecord 的 CHANNEL_IN_*，直接使用会导致
+        // "Unsupported channel mask configuration" 异常
+        val channelConfig = if (channelCount >= 2) {
+            AudioFormat.CHANNEL_OUT_STEREO
+        } else {
+            AudioFormat.CHANNEL_OUT_MONO
+        }
         Logger.i(TAG, "initAudioTrack: sample=$sampleRate,format=$audioFormat,count=$channelCount")
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         val minBufferSize = AudioTrack.getMinBufferSize(
