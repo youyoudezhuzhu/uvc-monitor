@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioTrack
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
@@ -12,6 +15,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -19,13 +23,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.jiangdg.ausbc.CameraClient
-import com.jiangdg.ausbc.callback.IPlayCallBack
 import com.jiangdg.ausbc.callback.IPreviewDataCallBack
 import com.jiangdg.ausbc.camera.CameraUvcStrategy
 import com.jiangdg.ausbc.camera.bean.CameraRequest
 import com.jiangdg.ausbc.camera.bean.PreviewSize
 import com.jiangdg.ausbc.render.env.RotateType
 import com.jiangdg.ausbc.widget.AspectRatioSurfaceView
+import com.jiangdg.uac.UACAudio
+import com.jiangdg.uac.UACAudioCallBack
 import com.honksoft.monmon.MainActivity.Companion.EXTRA_DEVICE_ID
 import com.honksoft.monmon.MainActivity.Companion.EXTRA_DEVICE_NAME
 import com.honksoft.monmon.MainActivity.Companion.REQUIRED_PERMISSIONS
@@ -58,6 +63,9 @@ class FullscreenActivity : AppCompatActivity() {
 
     private var rotationIndex = 0
     private var currentSize: PreviewSize? = null
+
+    private var uacAudio: UACAudio? = null
+    private var audioTrack: AudioTrack? = null
 
     @Volatile
     private var peakEnabled = false
@@ -144,6 +152,7 @@ class FullscreenActivity : AppCompatActivity() {
         }
 
         binding.btnBack.setOnClickListener { finish() }
+        binding.btnBrightness.setOnClickListener { showBrightnessDialog() }
         binding.btnPeak.setOnClickListener {
             peakEnabled = !peakEnabled
             applyPeakMode()
@@ -215,33 +224,96 @@ class FullscreenActivity : AppCompatActivity() {
                 showStatus(getString(R.string.no_device))
             }
 
-            // 打开预览（渲染到 SurfaceView）+ 自动播放 UAC 音频
+            // 打开预览（渲染到 SurfaceView）+ 后台启动 UAC 音频播放
             cameraClient?.openCamera(binding.svCameraViewMain)
-            startAudioPlayback()
+            Thread { startUacAudio() }.start()
             applyPeakMode()
         }
     }
 
     private fun releaseCamera() {
-        cameraClient?.stopPlayMic()
+        stopUacAudio()
         cameraClient?.removePreviewDataCallBack(previewCallback)
         cameraClient?.closeCamera()
         cameraClient = null
     }
 
-    private fun startAudioPlayback() {
-        cameraClient?.startPlayMic(object : IPlayCallBack {
-            override fun onBegin() {
-                runOnUiThread { hideStatus() }
-            }
+    /** 自接管 UAC 音频播放：UACAudio 直接喂 AudioTrack（绕开 AUSBC 队列丢包导致的失真） */
+    private fun startUacAudio() {
+        try {
+            val strategy = cameraClient?.getCameraStrategy() as? CameraUvcStrategy ?: return
+            val ctrlBlock = strategy.getUsbControlBlock() ?: return
 
-            override fun onError(error: String) {
-                runOnUiThread { showStatus("音频不可用: $error") }
-            }
+            val audio = UACAudio()
+            audio.init(ctrlBlock)
 
-            override fun onComplete() {
+            val sampleRate = audio.getSampleRate().takeIf { it > 0 } ?: 48000
+            val channelCount = audio.getChannelCount().takeIf { it > 0 } ?: 2
+            val bitResolution = audio.getBitResolution().takeIf { it > 0 } ?: 16
+            val channelMask = if (channelCount >= 2) {
+                AudioFormat.CHANNEL_OUT_STEREO
+            } else {
+                AudioFormat.CHANNEL_OUT_MONO
             }
-        })
+            val encoding = if (bitResolution >= 16) {
+                AudioFormat.ENCODING_PCM_16BIT
+            } else {
+                AudioFormat.ENCODING_PCM_8BIT
+            }
+            val minBuf = AudioTrack.getMinBufferSize(sampleRate, channelMask, encoding)
+            val track = AudioTrack.Builder()
+                .setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+                        .build()
+                )
+                .setAudioFormat(
+                    AudioFormat.Builder()
+                        .setSampleRate(sampleRate)
+                        .setEncoding(encoding)
+                        .setChannelMask(channelMask)
+                        .build()
+                )
+                .setBufferSizeInBytes(maxOf(minBuf, sampleRate * 4))
+                .setTransferMode(AudioTrack.MODE_STREAM)
+                .build()
+            track.play()
+
+            // PCM 回调直接写 AudioTrack（write 自带背压，不丢数据）
+            audio.addAudioCallBack(object : UACAudioCallBack {
+                override fun pcmData(data: ByteArray) {
+                    try {
+                        audioTrack?.write(data, 0, data.size)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "audio write err: ${e.message}")
+                    }
+                }
+            })
+            audio.startRecording()
+
+            uacAudio = audio
+            audioTrack = track
+            runOnUiThread { hideStatus() }
+            Log.i(TAG, "UAC audio started: ${sampleRate}Hz ${channelCount}ch ${bitResolution}bit")
+        } catch (e: Exception) {
+            Log.w(TAG, "UAC audio init failed: ${e.message}")
+        }
+    }
+
+    private fun stopUacAudio() {
+        try {
+            uacAudio?.stopRecording()
+            uacAudio?.release()
+        } catch (e: Exception) {
+        }
+        try {
+            audioTrack?.stop()
+        } catch (e: Exception) {
+        }
+        audioTrack?.release()
+        uacAudio = null
+        audioTrack = null
     }
 
     /** 峰焦开：帧处理 overlay；峰焦关：SurfaceView 直通（更流畅） */
@@ -272,6 +344,36 @@ class FullscreenActivity : AppCompatActivity() {
             else -> RotateType.ANGLE_0
         }
         cameraClient?.setRotateType(type)
+    }
+
+    /** 画面亮度调节（UVC 亮度控制，解决采集卡过曝） */
+    private fun showBrightnessDialog() {
+        val strategy = cameraClient?.getCameraStrategy() as? CameraUvcStrategy ?: return
+        val max = strategy.getBrightnessMax().coerceAtLeast(100)
+        val current = strategy.getBrightness().coerceIn(0, max)
+
+        val seek = SeekBar(this).apply {
+            this.max = max
+            this.progress = current
+        }
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(R.string.brightness_title)
+            .setView(seek)
+            .setPositiveButton(R.string.done, null)
+            .setNegativeButton(R.string.reset) { _, _ -> strategy.resetBrightness() }
+            .create()
+        seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                strategy.setBrightness(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+        dialog.show()
     }
 
     private fun showResolutionDialog() {

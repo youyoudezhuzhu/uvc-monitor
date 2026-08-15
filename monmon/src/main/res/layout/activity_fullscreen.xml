@@ -108,6 +108,15 @@
         android:visibility="gone">
 
         <ImageButton
+            android:id="@+id/btnBrightness"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:src="@drawable/ic_brightness"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/brightness"
+            app:tint="@color/text_primary" />
+
+        <ImageButton
             android:id="@+id/btnRotate"
             android:layout_width="52dp"
             android:layout_height="52dp"

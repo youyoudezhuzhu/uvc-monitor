@@ -19,6 +19,10 @@
     <string name="no_device">未检测到 UVC 设备，请检查 OTG 连接</string>
     <string name="open_failed">打开相机失败</string>
     <string name="back">返回</string>
+    <string name="brightness">亮度</string>
+    <string name="brightness_title">画面亮度</string>
+    <string name="done">完成</string>
+    <string name="reset">重置</string>
     <string name="rotate">旋转</string>
     <string name="peak_focus">峰焦辅助</string>
     <string name="peak_on">峰焦：开</string>
