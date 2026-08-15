@@ -356,7 +356,7 @@ class FullscreenActivity : AppCompatActivity() {
         val sizes = cameraHelper?.supportedSizeList ?: return
         if (sizes.isEmpty()) return
         val labels = sizes.map { s ->
-            val fps = s.fps.firstOrNull() ?: 0
+            val fps = s.fpsList?.firstOrNull() ?: s.fps
             "${s.width}×${s.height}  ${fps}fps"
         }
         val currentIndex = sizes.indexOfFirst {
