@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-  namespace = "com.jiangdg.libausbc"
+  namespace = "com.jiangdg.ausbc"
   compileSdk {
     version = release(36)
   }
