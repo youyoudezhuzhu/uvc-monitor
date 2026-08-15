@@ -16,6 +16,11 @@ android {
     versionName = "2.0.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+    // 只保留 arm64-v8a，OpenCV/UVC 原生库大幅瘦身
+    ndk {
+      abiFilters += listOf("arm64-v8a")
+    }
   }
 
   buildTypes {

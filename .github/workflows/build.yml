@@ -26,10 +26,20 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Build release APK (signed with debug key)
+      - name: Build release APK
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Sign release APK with generated keystore
+        run: |
+          keytool -genkeypair -v -keystore release.keystore -alias uvc -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass uvcmonitor -keypass uvcmonitor -dname "CN=UVC Monitor, OU=youyoudezhuzhu, O=youyoudezhuzhu, L=NA, S=NA, C=CN" > /dev/null 2>&1
+          APKSIGNER=$(ls $ANDROID_HOME/build-tools/*/apksigner | tail -1)
+          echo "using apksigner: $APKSIGNER"
+          $APKSIGNER sign --ks release.keystore --ks-pass pass:uvcmonitor --key-pass pass:uvcmonitor \
+            --out monmon/build/outputs/apk/release/uvc-monitor-signed.apk \
+            monmon/build/outputs/apk/release/monmon-release-unsigned.apk
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
@@ -37,8 +47,8 @@ jobs:
           name: uvc-monitor-debug
           path: monmon/build/outputs/apk/debug/*.apk
 
-      - name: Upload release APK
+      - name: Upload signed release APK
         uses: actions/upload-artifact@v4
         with:
           name: uvc-monitor-release
-          path: monmon/build/outputs/apk/release/*.apk
+          path: monmon/build/outputs/apk/release/uvc-monitor-signed.apk
