@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 取景框边框 -->
+    <path
+        android:pathData="M34,38 L74,38 L74,70 L34,70 Z"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="4"
+        android:fillColor="#00000000"
+        android:strokeLineJoin="round" />
+    <!-- 中心镜头圆点 -->
+    <path
+        android:pathData="M54,54 m-7,0 a7,7 0 1,1 14,0 a7,7 0 1,1 -14,0"
+        android:fillColor="#22D3EE" />
+    <!-- 录制状态点 -->
+    <path
+        android:pathData="M54,78 m-3,0 a3,3 0 1,1 6,0 a3,3 0 1,1 -6,0"
+        android:fillColor="#4ADE80" />
+</vector>

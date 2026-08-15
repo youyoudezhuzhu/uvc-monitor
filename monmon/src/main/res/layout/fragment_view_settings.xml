@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_weight="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:padding="8dip"
+        tools:context=".ViewSettingsFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Peaking Threshold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/threshold_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:value="50"
+            android:valueFrom="0"
+            android:valueTo="100"
+            app:labelBehavior="floating"
+            app:tickVisible="false" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Peaking Visibility"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupPeakVis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="2dip">
+
+            <RadioButton
+                android:id="@+id/peak_vis_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Overlay" />
+
+            <RadioButton
+                android:id="@+id/peak_vis_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Off" />
+
+            <RadioButton
+                android:id="@+id/peak_vis_edges"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edges Only" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Peaking Color"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupPeakColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="2dip">
+
+            <RadioButton
+                android:id="@+id/peak_color_red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Red" />
+
+            <RadioButton
+                android:id="@+id/peak_color_green"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Green" />
+
+            <RadioButton
+                android:id="@+id/peak_color_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Blue" />
+
+            <RadioButton
+                android:id="@+id/peak_color_yellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Yellow" />
+
+            <RadioButton
+                android:id="@+id/peak_color_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="White" />
+
+        </RadioGroup>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reduce Resolution"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tries to force a lower device resolution, which may improve performance on older devices. Requires preview restart (press BACK and re-open USB device)." />
+
+        <Switch
+            android:id="@+id/reduceRes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Force 720p30" />
+    </LinearLayout>
+</ScrollView>

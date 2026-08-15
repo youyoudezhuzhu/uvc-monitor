@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色监视器配色 -->
+    <color name="background">#0B0F19</color>
+    <color name="surface">#141B26</color>
+    <color name="surface_stroke">#233043</color>
+    <color name="primary">#38BDF8</color>
+    <color name="on_primary">#06121D</color>
+    <color name="secondary">#22D3EE</color>
+    <color name="on_secondary">#041318</color>
+    <color name="text_primary">#E2E8F0</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_tertiary">#64748B</color>
+    <color name="status_ok">#4ADE80</color>
+    <color name="status_warn">#FBBF24</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="semitransparent">#80000000</color>
+    <color name="dialog_bg">#F0141B26</color>
+</resources>

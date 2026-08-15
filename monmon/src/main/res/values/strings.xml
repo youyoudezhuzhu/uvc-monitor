@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UVC 监视器</string>
+    <string name="title_activity_fullscreen">预览</string>
+
+    <!-- 主界面 -->
+    <string name="device_count_hint">正在检测 USB 设备…</string>
+    <string name="device_count">检测到 %1$d 个 UVC 设备</string>
+    <string name="empty_title">未检测到 USB 设备</string>
+    <string name="empty_desc">请通过 OTG 连接 USB 摄像头或 HDMI 采集卡\n（需设备支持 USB OTG）</string>
+    <string name="refresh">刷新</string>
+    <string name="about">关于</string>
+    <string name="version_footer">UVC 监视器 v2.0.0 · 基于 UVCAndroid 开源库</string>
+    <string name="about_message">UVC 监视器 — 在安卓设备上显示 USB 摄像头 / HDMI 采集卡画面\n\n基于 UVCAndroid 开源库构建，支持峰焦辅助（手动对焦监视）\nGitHub: https://github.com/youyoudezhuzhu/uvc-monitor</string>
+    <string name="about_ok">好的</string>
+
+    <!-- 预览界面 -->
+    <string name="device_connecting">正在连接 %1$s …</string>
+    <string name="no_device">未检测到 UVC 设备，请检查 OTG 连接</string>
+    <string name="open_failed">打开相机失败</string>
+    <string name="back">返回</string>
+    <string name="rotate">旋转</string>
+    <string name="peak_focus">峰焦辅助</string>
+    <string name="peak_on">峰焦：开</string>
+    <string name="peak_off">峰焦：关</string>
+    <string name="resolution">分辨率</string>
+    <string name="resolution_title">选择分辨率</string>
+    <string name="cancel">取消</string>
+    <string name="permission_denied">需要相机和录音权限才能使用</string>
+
+    <!-- 设置弹窗 -->
+    <string name="hello_blank_fragment">设置</string>
+</resources>
