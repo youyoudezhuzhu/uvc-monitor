@@ -350,7 +350,7 @@ class FullscreenActivity : AppCompatActivity() {
     private fun showBrightnessDialog() {
         val strategy = cameraClient?.getCameraStrategy() as? CameraUvcStrategy ?: return
         val max = strategy.getBrightnessMax().coerceAtLeast(100)
-        val current = strategy.getBrightness().coerceIn(0, max)
+        val current = (strategy.getBrightness() ?: 0).coerceIn(0, max)
 
         val seek = SeekBar(this).apply {
             this.max = max

@@ -617,20 +617,6 @@ class CameraUvcStrategy(ctx: Context) : ICameraStrategy(ctx) {
     }
 
     /**
-     * Set brightness (%)
-     *
-     * @param brightness brightness value 0-100
-     */
-    fun setBrightness(brightness: Int) {
-        mUVCCamera?.setBrightness(brightness)
-    }
-
-    /**
-     * Get brightness (%)
-     */
-    fun getBrightness(): Int = mUVCCamera?.brightness ?: 0
-
-    /**
      * Get brightness max value (%)
      */
     fun getBrightnessMax(): Int = mUVCCamera?.brightnessMax ?: 100
