@@ -7,12 +7,13 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 appcompat = "1.7.1"
 material = "1.13.0"
+constraintlayout = "2.2.1"
 datastorePreferences = "1.2.0"
 kotlin = "2.3.0"
 
 ### CUSTOM
-uvcAndroid = "1.0.13"
 openCV = "4.13.0"
+xlog = "1.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -22,12 +23,14 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 
 ### CUSTOM
-uvcAndroid = { group = "com.herohan", name = "UVCAndroid", version.ref = "uvcAndroid" }
 openCV = { group = "org.opencv", name = "opencv", version.ref = "openCV" }
+xlog = { group = "com.elvishew", name = "xlog", version.ref = "xlog" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

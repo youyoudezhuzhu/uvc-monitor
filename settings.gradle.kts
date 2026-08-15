@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MonMon"
 include(":monmon")
- 
+include(":libuvc")
+include(":libausbc")

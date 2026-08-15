@@ -6,7 +6,7 @@
     android:background="@color/black">
 
     <!-- UVC 预览（非峰焦模式直通显示） -->
-    <com.serenegiant.widget.AspectRatioSurfaceView
+    <com.jiangdg.ausbc.widget.AspectRatioSurfaceView
         android:id="@+id/svCameraViewMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

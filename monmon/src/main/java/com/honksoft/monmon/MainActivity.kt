@@ -17,8 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.herohan.uvcapp.CameraHelper
-import com.herohan.uvcapp.ICameraHelper
+import com.jiangdg.ausbc.camera.CameraUvcStrategy
 import com.honksoft.monmon.databinding.ActivityMainBinding
 
 /**
@@ -27,7 +26,7 @@ import com.honksoft.monmon.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var cameraHelper: ICameraHelper? = null
+    private var uvcStrategy: CameraUvcStrategy? = null
 
     private val activityResultLauncher =
         registerForActivityResult(
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        cameraHelper = CameraHelper()
+        uvcStrategy = CameraUvcStrategy(this)
 
         binding.rvDevices.layoutManager = LinearLayoutManager(this)
         binding.btnRefresh.setOnClickListener { refreshDevices() }
@@ -78,8 +77,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         unregisterReceiver(usbReceiver)
-        cameraHelper?.release()
-        cameraHelper = null
+        uvcStrategy?.unRegister()
+        uvcStrategy = null
         super.onDestroy()
     }
 
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             requestPermissions()
             return
         }
-        val list = cameraHelper?.getDeviceList() ?: emptyList()
+        val list = uvcStrategy?.getUsbDeviceList() ?: emptyList()
         if (list.isEmpty()) {
             binding.rvDevices.visibility = View.GONE
             binding.emptyState.visibility = View.VISIBLE

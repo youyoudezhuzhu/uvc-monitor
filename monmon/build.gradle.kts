@@ -52,6 +52,6 @@ dependencies {
   androidTestImplementation(libs.androidx.espresso.core)
 
   // Custom
-  implementation(libs.uvcAndroid)
+  implementation(project(":libausbc"))
   implementation(libs.openCV)
 }
