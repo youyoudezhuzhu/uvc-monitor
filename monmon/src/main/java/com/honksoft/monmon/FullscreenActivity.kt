@@ -63,6 +63,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     private var rotationIndex = 0
     private var currentSize: PreviewSize? = null
+    private var frameCbRegistered = false
 
     private var uacAudio: UACAudio? = null
     private var audioTrack: AudioTrack? = null
@@ -214,7 +215,6 @@ class FullscreenActivity : AppCompatActivity() {
                 .setCameraStrategy(CameraUvcStrategy(this))
                 .setEnableGLES(false)
                 .build()
-            cameraClient?.addPreviewDataCallBack(previewCallback)
 
             val deviceId = intent.getIntExtra(EXTRA_DEVICE_ID, -1)
             if (deviceId > 0) {
@@ -233,7 +233,7 @@ class FullscreenActivity : AppCompatActivity() {
 
     private fun releaseCamera() {
         stopUacAudio()
-        cameraClient?.removePreviewDataCallBack(previewCallback)
+        unregisterFrameCallback()
         cameraClient?.closeCamera()
         cameraClient = null
     }
@@ -275,7 +275,7 @@ class FullscreenActivity : AppCompatActivity() {
                         .setChannelMask(channelMask)
                         .build()
                 )
-                .setBufferSizeInBytes(maxOf(minBuf, sampleRate * 4))
+                .setBufferSizeInBytes(minBuf)
                 .setTransferMode(AudioTrack.MODE_STREAM)
                 .build()
             track.play()
@@ -316,16 +316,30 @@ class FullscreenActivity : AppCompatActivity() {
         audioTrack = null
     }
 
-    /** 峰焦开：帧处理 overlay；峰焦关：SurfaceView 直通（更流畅） */
+    /** 峰焦开：帧处理 overlay + 注册帧回调；峰焦关：SurfaceView 直通（更流畅，零帧拷贝） */
     private fun applyPeakMode() {
         updatePeakButton()
         if (peakEnabled) {
             cameraViewMain?.visibility = View.GONE
             cameraOverlay?.visibility = View.VISIBLE
+            registerFrameCallback()
         } else {
             cameraOverlay?.visibility = View.GONE
             cameraViewMain?.visibility = View.VISIBLE
+            unregisterFrameCallback()
         }
+    }
+
+    private fun registerFrameCallback() {
+        if (frameCbRegistered) return
+        frameCbRegistered = true
+        cameraClient?.addPreviewDataCallBack(previewCallback)
+    }
+
+    private fun unregisterFrameCallback() {
+        if (!frameCbRegistered) return
+        frameCbRegistered = false
+        cameraClient?.removePreviewDataCallBack(previewCallback)
     }
 
     private fun updatePeakButton() {
